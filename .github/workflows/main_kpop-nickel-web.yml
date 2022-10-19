@@ -23,7 +23,7 @@ jobs:
 
       - name: npm install, build, and test
         run: |
-          NODE_ENV=production yarn create strapi-app kpop-nickel --no-run
+          NODE_ENV=production yarn create strapi-app kpop-nickel --quickstart --no-run
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
