@@ -26,7 +26,7 @@ jobs:
           yarn create strapi-app kpop-nickel --quickstart --no-run
 
       - name: 'Tar files'
-        run: tar -cf node-app.tar kpop-nickel
+        run: tar -czf node-app.tar.gz -C kpop-nickel .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
