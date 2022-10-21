@@ -23,8 +23,9 @@ jobs:
 
       - name: yarn create
         run: |
-          yarn create strapi-app kpop-nickel --dbclient=mysql --dbhost=strapi --dbport=3306 --dbname=strapi --dbusername=strapi --dbpassword=strapi --no-run
+          yarn create strapi-app kpop-nickel --quickstart --dbclient=mysql --dbhost=strapi --dbport=3306 --dbname=strapi --dbusername=strapi --dbpassword=strapi --no-run
           sed -i 's!strapi start!node node_modules/@strapi/strapi/bin/strapi.js start!g' kpop-nickel/package.json
+          yarn install --cwd=kpop-nickel
 
       - name: 'Tar files'
         run: tar -czf node-app.tar.gz -C kpop-nickel .
