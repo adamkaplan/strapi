@@ -24,13 +24,15 @@ jobs:
       - name: Create strapi-app
         run: yarn create strapi-app kpop-nickel --dbclient=mysql --dbhost=strapi --dbport=3306 --dbname=strapi --dbusername=strapi --dbpassword=strapi --no-run
 
-      - name: Install dependencies
-        run: yarn install --cwd=kpop-nickel
-
       - name: Prepare application
         run: |
           sed -i 's!strapi start!node node_modules/@strapi/strapi/bin/strapi.js start!g' kpop-nickel/package.json
           cp -R config_override/*.js kpop-nickel/config
+
+      - name: Install dependencies
+        run: |
+          yarn install --cwd=kpop-nickel
+          yarn build --cwd=kpop-nickel
 
       - name: Zip files
         run: cd kpop-nickel && zip -qr ../node-app.zip .
