@@ -50,7 +50,7 @@ jobs:
           name: node-app
 
       - name: 'Untar files'
-        run: 'tar -zxf node-app.tar.gz' 
+        run: 'tar -zxf node-app.tar.gz'
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
