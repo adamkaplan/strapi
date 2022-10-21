@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install --cwd=kpop-nickel
-          yarn build --cwd=kpop-nickel
+          cd kpop-nickel && yarn build
 
       - name: Zip files
         run: cd kpop-nickel && zip -qr ../node-app.zip .
