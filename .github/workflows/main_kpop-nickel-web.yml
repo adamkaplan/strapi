@@ -23,7 +23,7 @@ jobs:
 
       - name: yarn create
         run: |
-          yarn create strapi-app kpop-nickel --quickstart --no-run
+          yarn create strapi-app kpop-nickel --quickstart --dbclient=mysql --no-run
 
       - name: 'Tar files'
         run: tar -czf node-app.tar.gz -C kpop-nickel .
