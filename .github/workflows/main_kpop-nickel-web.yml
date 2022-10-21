@@ -19,22 +19,27 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '16.x'
 
-      - name: yarn create
+      - name: Create strapi-app
+        run: yarn create strapi-app kpop-nickel --dbclient=mysql --dbhost=strapi --dbport=3306 --dbname=strapi --dbusername=strapi --dbpassword=strapi --no-run
+
+      - name: Install dependencies
+        run: yarn install --cwd=kpop-nickel
+
+      - name: Prepare application
         run: |
-          yarn create strapi-app kpop-nickel --dbclient=mysql --dbhost=strapi --dbport=3306 --dbname=strapi --dbusername=strapi --dbpassword=strapi --no-run
           sed -i 's!strapi start!node node_modules/@strapi/strapi/bin/strapi.js start!g' kpop-nickel/package.json
-          yarn install --cwd=kpop-nickel
+          cp -R config_override/*.js kpop-nickel/config
 
-      - name: 'Tar files'
-        run: tar -czf node-app.tar.gz -C kpop-nickel .
+      - name: Zip files
+        run: cd kpop-nickel && zip -qr node-app.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: node-app.tar.gz
+          path: node-app.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -49,8 +54,8 @@ jobs:
         with:
           name: node-app
 
-      - name: 'Untar files'
-        run: 'tar -zxf node-app.tar.gz'
+      #- name: 'Untar files'
+      #  run: 'tar -zxf node-app.tar.gz'
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -59,4 +64,4 @@ jobs:
           app-name: 'kpop-nickel-web'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4E9D0F74E7054D46B86E5953DF278681 }}
-          package: .
+          package: node-app.zip
