@@ -26,8 +26,9 @@ jobs:
 
       - name: Prepare application
         run: |
-          sed -i 's!strapi start!node node_modules/@strapi/strapi/bin/strapi.js start!g' kpop-nickel/package.json
+          sed -i 's!strapi start!node node_modules/@strapi/strapi/bin/strapi.js develop --watch-admin!g' kpop-nickel/package.json
           cp -R config_override/*.js kpop-nickel/config
+          #sed -i 's!strapi start!node node_modules/@strapi/strapi/bin/strapi.js start!g' kpop-nickel/package.json
 
       - name: Install dependencies
         run: |
