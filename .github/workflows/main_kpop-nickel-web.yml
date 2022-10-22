@@ -33,7 +33,7 @@ jobs:
         run: cd kpop-nickel && yarn install
 
       - name: Zip files
-        run: cd kpop-nickel && zip -qr ../node-app.zip .
+        run: cd kpop-nickel && zip -qyr ../node-app.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
