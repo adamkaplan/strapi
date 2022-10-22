@@ -31,7 +31,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          export ENV=production SITE_URL=${{ secrets.SITE_URL }}
+          export NODE_ENV=production SITE_URL=${{ secrets.SITE_URL }}
           yarn install --cwd=kpop-nickel
           cd kpop-nickel && yarn build
 
