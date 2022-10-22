@@ -30,9 +30,7 @@ jobs:
           cp -R config_override/*.js kpop-nickel/config
 
       - name: Install dependencies
-        run: |
-          yarn install --cwd=kpop-nickel
-          cd kpop-nickel && yarn build
+        run: cd kpop-nickel && yarn install
 
       - name: Zip files
         run: cd kpop-nickel && zip -qr ../node-app.zip .
