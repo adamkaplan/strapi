@@ -9,6 +9,10 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  DEPLOY_FRONTEND: false
+  DEPLOY_ADMIN: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,26 +35,34 @@ jobs:
 
       - name: Install dependencies
         run: |
-          export NODE_ENV=production SITE_URL=${{ secrets.SITE_URL }}
           yarn install --cwd=kpop-nickel
           cd kpop-nickel && yarn build
+        env: |
+          NODE_ENV: production
+          SITE_URL: ${{ secrets.SITE_URL }}
+        if: ${{ env.DEPLOY_FRONTEND }}
 
       - name: Zip app files
         run: cd kpop-nickel && zip -qyr ../node-app.zip .
+        if: ${{ env.DEPLOY_FRONTEND }}
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: node-app
           path: node-app.zip
+        if: ${{ env.DEPLOY_FRONTEND }}
 
       - name: Build standalone development admin panel
-        run: |
-          export NODE_ENV=development SITE_URL=${{ secrets.SITE_URL }}
-          cd kpop-nickel && yarn build
+        run: cd kpop-nickel && yarn build
+        env: |
+          NODE_ENV: development
+          SITE_URL: ${{ secrets.SITE_URL }}
+        if: ${{ env.DEPLOY_ADMIN }}
 
       - name: Zip admin panel files
         run: cd kpop-nickel/build && zip -qyr ../../node-app-admin.zip .
+        if: ${{ false }}
         
       - name: Deploy admin panel
         id: admindeploy
@@ -63,12 +75,14 @@ jobs:
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           skip_app_build: true
           skip_api_build: true
-          app_location: "build" # App source code path
+          app_location: "/" # App source code path
           ###### End of Repository/Build Configurations ######
+        if: ${{ env.DEPLOY_ADMIN }}
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    if: ${{ env.DEPLOY_FRONTEND }}
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
