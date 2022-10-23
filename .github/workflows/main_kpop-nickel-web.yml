@@ -75,14 +75,13 @@ jobs:
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           skip_app_build: true
           skip_api_build: true
-          app_location: "/" # App source code path
+          app_location: "kpop-nickel/build" # App source code path
           ###### End of Repository/Build Configurations ######
         if: ${{ env.DEPLOY_ADMIN }}
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: ${{ env.DEPLOY_FRONTEND }}
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
