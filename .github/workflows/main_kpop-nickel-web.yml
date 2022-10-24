@@ -105,4 +105,5 @@ jobs:
           app-name: 'kpop-nickel-web'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4E9D0F74E7054D46B86E5953DF278681 }}
-          package: node-app.zip
+          package: .
+          #package: node-app.zip
