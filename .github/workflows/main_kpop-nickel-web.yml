@@ -38,7 +38,7 @@ jobs:
           yarn install --cwd=kpop-nickel
           cd kpop-nickel && yarn build
         env:
-          NODE_ENV: production
+          #NODE_ENV: production
           SITE_URL: ${{ secrets.SITE_URL }}
         if: ${{ env.DEPLOY_FRONTEND }}
 
@@ -60,7 +60,7 @@ jobs:
         env:
           NODE_ENV: development
           SITE_URL: ${{ secrets.SITE_URL }}
-        if: ${{ env.DEPLOY_ADMIN }}
+        if: ${{ false }}
 
       - name: Zip admin panel files
         run: cd kpop-nickel/build && zip -qyr ../../node-app-admin.zip .
@@ -79,7 +79,7 @@ jobs:
           skip_api_build: true
           app_location: 'kpop-nickel/build' # App source code path
           ###### End of Repository/Build Configurations ######
-        if: ${{ env.DEPLOY_ADMIN }}
+        if: ${{ false }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -94,7 +94,8 @@ jobs:
         with:
           name: node-app
 
-      #- name: 'Untar files'
+      - name: 'Untar files'
+        run: 'unzip node-app.zip'
       #  run: 'tar -zxf node-app.tar.gz'
 
       - name: 'Deploy to Azure Web App'
